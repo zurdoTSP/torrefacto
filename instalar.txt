@@ -1,0 +1,9 @@
+sudo apt-get install python3-pip
+
+
+sudo pip3 install PyQt5
+
+git add README.md
+git commit -m "comentario"
+git remote add origin https://github.com/LuchoCastillo/Repositorio.git
+git push -u origin master
