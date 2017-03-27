@@ -8,18 +8,13 @@ import ctypes
 import completo
 import os.path
 import AESCipher
-#Clase heredada de QMainWindow (Constructor de ventanas)
-
-
-  #Asignar estilos CSS
-  #self.setStyleSheet("background-color: #000; color: #fff;")
-
+######################################################################## 
 class MainWindow(QMainWindow):
- #Método constructor de la clase
+	"""Constructor"""
 	def __init__(self,dr):
-  #Iniciar el objeto QMainWindow
+  		#Iniciar el objeto QMainWindow
 		QMainWindow.__init__(self)
-  #Cargar la configuración del archivo .ui en el objeto
+		#Cargar la configuración del archivo .ui en el objeto
 		uic.loadUi("mainwindow2.ui", self)
 		iconCar=QIcon('New-Folder-icon.png')
 		iconFil=QIcon('nfile.png')
@@ -42,13 +37,8 @@ class MainWindow(QMainWindow):
 		tray_menu.addAction(hide_action)
 		tray_menu.addAction(quit_action)
 		self.systray.setContextMenu(tray_menu)
-
 		self.systray.show()
 		self.setWindowIcon(iconApp) 
-		#self.setStyleSheet("background-color:#000000; color:#3ADF00;font-size:bold")
-		#self.treeWidget.setStyleSheet("background-color:#000000; color:#3ADF00;font-size:bold")
-		#self.treeWidget.setStyleSheet("background-color:#000000; color:#3ADF00;font-size:bold")
-
 		self.nCarpeta.clicked.connect(self.crearFolder)
 		self.saves.clicked.connect(self.save)
 		self.negrita.clicked.connect(self.bold)
@@ -74,9 +64,11 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.save)
 		QShortcut(QtGui.QKeySequence("Ctrl+T"), self, self.titulo)
 		
-
+	#----------------------------------------------------------------------
 	def formar(self):
-
+		"""
+		Rellenar el arbol de directorios para trabajar con los archivos/ficheros de Dropbox.
+		"""
 		t=self.drop.listarCarpetas()
 		t2=t.getDirectorios()
 		hijos=t.getHijos()
@@ -97,8 +89,16 @@ class MainWindow(QMainWindow):
 					q.append(hijos[j].getNombre())
 					barA = QTreeWidgetItem(A,q)
 					barA.setIcon(0,icon2)
+	#----------------------------------------------------------------------
+	"""###########################################################
 
+				TRABAJO CON DROPBOX
+
+	###########################################################"""
 	def crearFolder(self):
+		"""
+		Función para crear carpetas en Dropbox.
+		"""
 		value,crear= QInputDialog.getText(self, "crear archivo", "Nombre de la nueva carpeta:")
 		if crear and value!='':
 			print('Nombre:', value)
@@ -106,8 +106,11 @@ class MainWindow(QMainWindow):
 			self.treeWidget.clear()
 			self.formar()
 			self.treeWidget.expandToDepth(0)
-
+	#----------------------------------------------------------------------
 	def crearFich(self):
+		"""
+		Función para crear ficheros en Dropbox, a partir de un padre.
+		"""
 		if(self.dirCrear!=""):
 			value,crear= QInputDialog.getText(self, "crear archivo", "Nombre del nuevo fichero:")
 			if crear and value!='':
@@ -121,8 +124,11 @@ class MainWindow(QMainWindow):
 			print("debes establecer la ruta")
 			QMessageBox.warning(self, "WARNING", "Debes establecer una ruta para poder crear un fichero")
 		
-
+	#----------------------------------------------------------------------
 	def openElement(self):
+		"""
+		Función para abrir ficheros de Dropbox y extraer el texto para ser editado.
+		"""
 		item = self.treeWidget.currentItem()
 		y=item.parent()
 		y=y.text(0)
@@ -134,7 +140,7 @@ class MainWindow(QMainWindow):
 		else:
 			self.abierto=final
 			if  final.endswith(".enc"):
-				value,crear= QInputDialog.getText(self, "CONTRASEÑA", "Dame la contraseña con la que cifrarás el fichero:")
+				value,crear= QInputDialog.getText(self, "CONTRASEÑA", "Dame la contraseña con la que cifrarás el fichero:",QLineEdit.Password)
 				if crear and value!='':
 					x=self.drop.abrirFichero(final)
 					t=str(self.clave.decrypt(value,x),'cp1252')
@@ -144,10 +150,14 @@ class MainWindow(QMainWindow):
 				print(type(x))
 			#self.directorio.setText(self.drop.abrirFichero(final).decode('UTF-8'))
 				self.directorio.setText(x)
+	#----------------------------------------------------------------------
 	def save(self):
+		"""
+		Función para salvar el texto editado y subirlo a Dropbox.
+		"""
 		if(self.abierto!=""):
 			if self.encrip.isChecked():
-				value,crear= QInputDialog.getText(self, "CONTRASEÑA", "Dame la contraseña con la que cifrarás el fichero:")
+				value,crear= QInputDialog.getText(self, "CONTRASEÑA", "Dame la contraseña con la que cifrarás el fichero:",QLineEdit.Password)
 				if crear and value!='':
 					if not self.abierto.endswith(".enc"):
 						self.drop.saveF(self.clave.encrypt(value,self.directorio.toHtml()),self.abierto+".enc")
@@ -162,31 +172,48 @@ class MainWindow(QMainWindow):
 				self.drop.saveF(self.directorio.toHtml(),self.abierto)
 		else:
 			QMessageBox.warning(self, "WARNING", "Debes trabajar con un fichero antes de guardarlo")
-			
-	def bold(self):
+		print("se guarda")
+	#----------------------------------------------------------------------
+	"""###########################################################
 
+			FUNCIONES DE EDICIÖN DE TEXTO
+
+	###########################################################"""
+	def bold(self):
+		"""
+		Función para poner letras en negrita.
+		"""
 		if self.directorio.fontWeight() == QtGui.QFont.Bold:
 			self.directorio.setFontWeight(QtGui.QFont.Normal)
 		else:
 			self.directorio.setFontWeight(QtGui.QFont.Bold)
-
+	#----------------------------------------------------------------------
 	def lista(self):
+		"""
+		Función para añadir listas.
+		"""
 		cursor = self.directorio.textCursor()
 		cursor.insertList(QtGui.QTextListFormat.ListDisc)
-
+	#----------------------------------------------------------------------
 	def subra(self):
-
+		"""
+		Función para subrayar texto.
+		"""
 		state = self.directorio.fontUnderline()
 
 		self.directorio.setFontUnderline(not state)
-
+	#----------------------------------------------------------------------
 
 	def titulo(self):
+		"""
+		Prueba para añadir h1
+		"""
 		cursor=self.directorio.textCursor()
 		textSelected = cursor.selectedText()
 		self.directorio.insertHtml("<h1>"+textSelected+"</h1>")
 		self.directorio.insertHtml("<h2>"+textSelected+"</h2>")
 		self.directorio.insertHtml("<h3>"+textSelected+"</h3>")
+	#----------------------------------------------------------------------
 """
 
 barA = QTreeWidgetItem(A, ["bar", "i"])
