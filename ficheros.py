@@ -24,6 +24,8 @@ class ficheros:
 		x=dir.split('/')
 		d.setPadre(x[1])
 		d.setNombre(x[2])
+		d.setEtiqueta(x[1])
+		d.setEtiqueta(x[2])
 		self.__secundarios.append(d)
 	#----------------------------------------------------------------------
 	def getDirectorios(self):

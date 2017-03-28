@@ -1,12 +1,13 @@
+######################################################################## 
 class Hijo:
 	"""Recipiente que recoge un fichero y su directorio padre"""
 	def __init__(self):
 		"""Constructor"""
 		self.__nombre=''
 		self.__padre=''
+		self.__etiqueta=[]
 	def setPadre(self,dir):
-		"""Cambiar valor de la variable padre.
-
+		"""
 		Función que modifica el valor de la variable padre
 
 		Parámetros:
@@ -14,10 +15,9 @@ class Hijo:
 		
 		"""
 		self.__padre=dir
-
+	#----------------------------------------------------------------------
 	def setNombre(self,dir):
-		"""Cambiar valor de la variable nombre.
-
+		"""
 		Función que modifica el valor de la variable nombre, la cual es el hijo
 
 		Parámetros:
@@ -25,10 +25,9 @@ class Hijo:
 		
 		"""
 		self.__nombre=dir
-
+	#----------------------------------------------------------------------
 	def getPadre(self):
-		"""Devuelve el  valor de la variable padre.
-
+		"""
 		Función que modifica el valor de la variable padre
 
 		Devuelve:
@@ -36,10 +35,9 @@ class Hijo:
 		
 		"""
 		return self.__padre
-
+	#----------------------------------------------------------------------
 	def getNombre(self):
-		"""Devuelve el  valor de la variable nombre.
-
+		"""
 		Función que modifica el valor de la variable padre
 
 		Devuelve:
@@ -47,4 +45,21 @@ class Hijo:
 		
 		"""
 		return self.__nombre
-
+	#----------------------------------------------------------------------
+	def convertir(self,cad):
+		"""
+		Función que actualiza las etiquetas
+		
+		"""
+		lista=cad.split(",")
+		for x in lista:
+			if not x in __etiqueta:
+				self.setEtiqueta(x)
+	#----------------------------------------------------------------------
+	def setEtiqueta(self,x):
+		"""
+		Función que añade etiquetas al final
+		
+		"""
+		self.__etiqueta.append(x)		
+	#----------------------------------------------------------------------		__

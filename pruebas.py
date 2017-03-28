@@ -23,6 +23,7 @@ class MainWindow(QMainWindow):
 		iconN=QIcon('bold.png')
 		iconApp=QIcon('app.png')
 		iconSub=QIcon('underline.png')
+		self.hijos=""
 		self.drop = dr
 		self.clave=AESCipher.AESCipher()
 		self.systray = QSystemTrayIcon(iconApp, self)
@@ -71,7 +72,7 @@ class MainWindow(QMainWindow):
 		"""
 		t=self.drop.listarCarpetas()
 		t2=t.getDirectorios()
-		hijos=t.getHijos()
+		self.hijos=t.getHijos()
 		header=QTreeWidgetItem(["Droppy"])
 		icon=QIcon('home-icon.png')
 		icon2=QIcon('text-plain-icon.png')
@@ -83,10 +84,10 @@ class MainWindow(QMainWindow):
 			q.append(t2[i])
 			A = QTreeWidgetItem(root,q)
 			A.setIcon(0,icon)
-			for j in range(len(hijos)):
-				if ("/"+hijos[j].getPadre())==t2[i]:
+			for j in range(len(self.hijos)):
+				if ("/"+self.hijos[j].getPadre())==t2[i]:
 					q=[]
-					q.append(hijos[j].getNombre())
+					q.append(self.hijos[j].getNombre())
 					barA = QTreeWidgetItem(A,q)
 					barA.setIcon(0,icon2)
 	#----------------------------------------------------------------------
