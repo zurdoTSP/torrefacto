@@ -17,28 +17,27 @@
    <widget class="QTreeWidget" name="treeWidget">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>10</x>
       <y>10</y>
-      <width>256</width>
-      <height>231</height>
+      <width>221</width>
+      <height>291</height>
      </rect>
     </property>
     <column>
      <property name="text">
-      <string>1</string>
+      <string/>
      </property>
-     <property name="background">
-      <color>
-       <red>85</red>
-       <green>170</green>
-       <blue>255</blue>
-      </color>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
      <property name="foreground">
       <brush brushstyle="DiagCrossPattern">
        <color alpha="255">
-        <red>85</red>
-        <green>170</green>
+        <red>255</red>
+        <green>255</green>
         <blue>255</blue>
        </color>
       </brush>
@@ -48,8 +47,8 @@
    <widget class="QPushButton" name="nCarpeta">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>240</y>
+      <x>10</x>
+      <y>300</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -61,9 +60,9 @@
    <widget class="QTextEdit" name="directorio">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>250</x>
       <y>10</y>
-      <width>311</width>
+      <width>421</width>
       <height>291</height>
      </rect>
     </property>
@@ -71,8 +70,8 @@
    <widget class="QPushButton" name="nFile">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>240</y>
+      <x>30</x>
+      <y>300</y>
       <width>21</width>
       <height>21</height>
      </rect>
@@ -84,7 +83,7 @@
    <widget class="QPushButton" name="saves">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>250</x>
       <y>300</y>
       <width>21</width>
       <height>21</height>
@@ -97,7 +96,7 @@
    <widget class="QPushButton" name="negrita">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>610</x>
       <y>300</y>
       <width>21</width>
       <height>21</height>
@@ -110,7 +109,7 @@
    <widget class="QPushButton" name="listaB">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>630</x>
       <y>300</y>
       <width>21</width>
       <height>21</height>
@@ -123,8 +122,8 @@
    <widget class="QRadioButton" name="encrip">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>320</y>
+      <x>270</x>
+      <y>300</y>
       <width>93</width>
       <height>20</height>
      </rect>
@@ -136,7 +135,7 @@
    <widget class="QPushButton" name="subButton">
     <property name="geometry">
      <rect>
-      <x>400</x>
+      <x>650</x>
       <y>300</y>
       <width>21</width>
       <height>21</height>

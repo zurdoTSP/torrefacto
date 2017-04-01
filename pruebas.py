@@ -12,17 +12,18 @@ import AESCipher
 class MainWindow(QMainWindow):
 	"""Constructor"""
 	def __init__(self,dr):
+		ruta=os.getcwd()+"/icons/"
   		#Iniciar el objeto QMainWindow
 		QMainWindow.__init__(self)
 		#Cargar la configuración del archivo .ui en el objeto
 		uic.loadUi("mainwindow2.ui", self)
-		iconCar=QIcon('New-Folder-icon.png')
-		iconFil=QIcon('nfile.png')
-		iconSa=QIcon('save-icon.png')
-		iconL=QIcon('lista-icon.png')
-		iconN=QIcon('bold.png')
-		iconApp=QIcon('app.png')
-		iconSub=QIcon('underline.png')
+		iconCar=QIcon(ruta+'New-Folder-icon.png')
+		iconFil=QIcon(ruta+'nfile.png')
+		iconSa=QIcon(ruta+'save-icon.png')
+		iconL=QIcon(ruta+'lista-icon.png')
+		iconN=QIcon(ruta+'bold.png')
+		iconApp=QIcon(ruta+'app.png')
+		iconSub=QIcon(ruta+'underline.png')
 		self.hijos=""
 		self.drop = dr
 		self.clave=AESCipher.AESCipher()
@@ -64,18 +65,19 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+U"), self, self.subra)
 		QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.save)
 		QShortcut(QtGui.QKeySequence("Ctrl+T"), self, self.titulo)
-		
+
 	#----------------------------------------------------------------------
 	def formar(self):
 		"""
 		Rellenar el arbol de directorios para trabajar con los archivos/ficheros de Dropbox.
 		"""
+		ruta=os.getcwd()+"/icons/"
 		t=self.drop.listarCarpetas()
 		t2=t.getDirectorios()
 		self.hijos=t.getHijos()
 		header=QTreeWidgetItem(["Droppy"])
-		icon=QIcon('home-icon.png')
-		icon2=QIcon('text-plain-icon.png')
+		icon=QIcon(ruta+'home-icon.png')
+		icon2=QIcon(ruta+'text-plain-icon.png')
 
 		self.treeWidget.setHeaderItem(header) 
 		root = QTreeWidgetItem(self.treeWidget, ["dropbox"])
