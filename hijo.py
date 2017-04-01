@@ -63,3 +63,10 @@ class Hijo:
 		"""
 		self.__etiqueta.append(x)		
 	#----------------------------------------------------------------------		__
+	def getEtiqueta(self):
+		"""
+		Función que devuelve las etiquetas
+		
+		"""
+		return self.__etiqueta		
+	#----------------------------------------------------------------------		

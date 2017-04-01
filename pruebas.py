@@ -24,6 +24,7 @@ class MainWindow(QMainWindow):
 		iconN=QIcon(ruta+'bold.png')
 		iconApp=QIcon(ruta+'app.png')
 		iconSub=QIcon(ruta+'underline.png')
+		iconBus=QIcon(ruta+'lupa.png')
 		self.hijos=""
 		self.drop = dr
 		self.clave=AESCipher.AESCipher()
@@ -54,6 +55,7 @@ class MainWindow(QMainWindow):
 		self.nCarpeta.setIcon(iconCar)
 		self.nFile.setIcon(iconFil)
 		self.saves.setIcon(iconSa)
+		self.buscar.setIcon(iconBus)
 		self.abierto=""
 		self.negrita.setIcon(iconN)
 		self.listaB.setIcon(iconL)
@@ -65,6 +67,7 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+U"), self, self.subra)
 		QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.save)
 		QShortcut(QtGui.QKeySequence("Ctrl+T"), self, self.titulo)
+		QShortcut(QtGui.QKeySequence("Ctrl+Q"), self, self.ver)
 
 	#----------------------------------------------------------------------
 	def formar(self):
@@ -217,6 +220,12 @@ class MainWindow(QMainWindow):
 		self.directorio.insertHtml("<h2>"+textSelected+"</h2>")
 		self.directorio.insertHtml("<h3>"+textSelected+"</h3>")
 	#----------------------------------------------------------------------
+	def ver(self):
+		item = self.treeWidget.currentItem()
+		for x in self.hijos:
+			etiquet=x.getEtiqueta()
+			if item.text(0) in etiquet:
+				print(item.text(0))
 """
 
 barA = QTreeWidgetItem(A, ["bar", "i"])
