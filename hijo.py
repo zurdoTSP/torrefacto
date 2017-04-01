@@ -53,7 +53,7 @@ class Hijo:
 		"""
 		lista=cad.split(",")
 		for x in lista:
-			if not x in __etiqueta:
+			if not x in self.__etiqueta:
 				self.setEtiqueta(x)
 	#----------------------------------------------------------------------
 	def setEtiqueta(self,x):

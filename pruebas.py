@@ -25,6 +25,7 @@ class MainWindow(QMainWindow):
 		iconApp=QIcon(ruta+'app.png')
 		iconSub=QIcon(ruta+'underline.png')
 		iconBus=QIcon(ruta+'lupa.png')
+		iconEtiq=QIcon(ruta+'etiqueta.png')
 		self.hijos=""
 		self.drop = dr
 		self.clave=AESCipher.AESCipher()
@@ -47,6 +48,8 @@ class MainWindow(QMainWindow):
 		self.negrita.clicked.connect(self.bold)
 		self.listaB.clicked.connect(self.lista)
 		self.subButton.clicked.connect(self.subra)
+		self.buscar.clicked.connect(self.ver)
+		self.bEtiq.clicked.connect(self.EtiqNueva)
 		self.treeWidget.itemDoubleClicked.connect(self.openElement)
 		self.formar()
 		self.treeWidget.expandToDepth(0)
@@ -56,6 +59,7 @@ class MainWindow(QMainWindow):
 		self.nFile.setIcon(iconFil)
 		self.saves.setIcon(iconSa)
 		self.buscar.setIcon(iconBus)
+		self.bEtiq.setIcon(iconEtiq)
 		self.abierto=""
 		self.negrita.setIcon(iconN)
 		self.listaB.setIcon(iconL)
@@ -82,6 +86,33 @@ class MainWindow(QMainWindow):
 		icon=QIcon(ruta+'home-icon.png')
 		icon2=QIcon(ruta+'text-plain-icon.png')
 
+		self.treeWidget.setHeaderItem(header) 
+		root = QTreeWidgetItem(self.treeWidget, ["dropbox"])
+		for i in range(len(t2)):
+			q=[]
+			q.append(t2[i])
+			A = QTreeWidgetItem(root,q)
+			A.setIcon(0,icon)
+			for j in range(len(self.hijos)):
+				if ("/"+self.hijos[j].getPadre())==t2[i]:
+					q=[]
+					q.append(self.hijos[j].getNombre())
+					barA = QTreeWidgetItem(A,q)
+					barA.setIcon(0,icon2)
+	#----------------------------------------------------------------------
+
+	def formaE(self,listaN):
+		"""
+		Rellenar el arbol de directorios con los archivos filtrados.
+		"""
+		ruta=os.getcwd()+"/icons/"
+		self.hijos=listaN
+		header=QTreeWidgetItem(["Droppy"])
+		icon=QIcon(ruta+'home-icon.png')
+		icon2=QIcon(ruta+'text-plain-icon.png')
+		t2=[]
+		for w in listaN:
+			t2.append("/"+w.getPadre())
 		self.treeWidget.setHeaderItem(header) 
 		root = QTreeWidgetItem(self.treeWidget, ["dropbox"])
 		for i in range(len(t2)):
@@ -221,11 +252,47 @@ class MainWindow(QMainWindow):
 		self.directorio.insertHtml("<h3>"+textSelected+"</h3>")
 	#----------------------------------------------------------------------
 	def ver(self):
-		item = self.treeWidget.currentItem()
+		"""
+		Buscador de etiquetas provicional
+		"""
+		if(self.cajaBuscar.text()==""):
+			self.treeWidget.clear()
+			self.formar()
+			self.treeWidget.expandToDepth(0)
+		else:
+			listaN=[]
+			cad=self.cajaBuscar.text().split(",")
+			for x in self.hijos:
+				etiquet=x.getEtiqueta()
+				for y in etiquet:
+					if y in cad:	
+						listaN.append(x)
+			self.treeWidget.clear()
+			self.formaE(listaN)
+			self.treeWidget.expandToDepth(0)
+	#----------------------------------------------------------------------
+	def closeEvent(self, event):
+		"""
+		Evento que se dispara al cerrar la aplicación
+		"""
+		cad=self.cajaBuscar.text().split(",")	
 		for x in self.hijos:
 			etiquet=x.getEtiqueta()
-			if item.text(0) in etiquet:
-				print(item.text(0))
+			if len(etiquet)>2:
+				print("simulando volcado")
+	#----------------------------------------------------------------------
+	def EtiqNueva(self):
+		item = self.treeWidget.currentItem()
+		y=item.parent()
+		y=y.text(0)
+		n=item.text(0)
+		value,crear= QInputDialog.getText(self, "crear archivo", "Nombre de la nueva carpeta:")
+		if crear and value!='':
+			for x in self.hijos:
+				if x.getNombre()==n and ("/"+x.getPadre())==y:
+					x.convertir(value)
+	#----------------------------------------------------------------------
+		
 """
 
 barA = QTreeWidgetItem(A, ["bar", "i"])
