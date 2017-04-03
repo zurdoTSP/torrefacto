@@ -72,6 +72,7 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.save)
 		QShortcut(QtGui.QKeySequence("Ctrl+T"), self, self.titulo)
 		QShortcut(QtGui.QKeySequence("Ctrl+Q"), self, self.ver)
+		self.pruebasa()
 
 	#----------------------------------------------------------------------
 	def formar(self):
@@ -292,6 +293,8 @@ class MainWindow(QMainWindow):
 				if x.getNombre()==n and ("/"+x.getPadre())==y:
 					x.convertir(value)
 	#----------------------------------------------------------------------
+	def pruebasa(self):
+		self.drop.buscar()
 		
 """
 

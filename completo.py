@@ -131,6 +131,15 @@ class DropObj(object):
 	def borrarF(self,dir):
 		respuesta = self.client.file_delete(dir)
 	#----------------------------------------------------------------------
+	def buscar(self):
+		respuesta = self.client.search("","etiquetas.txt")
+		if(respuesta==[]):
+		
+			self.saveF("","etiquetas.txt")
+			print(bcolors.WARNING+"El fichero de etiquetas ha sido creado"+bcolors.ENDC)
+		else:
+			print(bcolors.WARNING+"El fichero de etiquetas ya existe"+bcolors.ENDC)
+	#----------------------------------------------------------------------
 #if __name__ == "__main__":
 #	drop = DropObj("config.ini")
 #	drop.listarCarpetas()
