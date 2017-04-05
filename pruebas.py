@@ -72,7 +72,8 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.save)
 		QShortcut(QtGui.QKeySequence("Ctrl+T"), self, self.titulo)
 		QShortcut(QtGui.QKeySequence("Ctrl+Q"), self, self.ver)
-		self.pruebasa()
+		self.openEvent()
+
 
 	#----------------------------------------------------------------------
 	def formar(self):
@@ -276,11 +277,27 @@ class MainWindow(QMainWindow):
 		"""
 		Evento que se dispara al cerrar la aplicación
 		"""
+		texto=""
 		cad=self.cajaBuscar.text().split(",")	
 		for x in self.hijos:
 			etiquet=x.getEtiqueta()
-			if len(etiquet)>2:
-				print("simulando volcado")
+			tam=len(etiquet)
+			if tam>2:
+				texto=texto+x.getPadre()+"/"+x.getNombre()+"/"
+				for i in range(2,tam):
+					texto=texto+etiquet[i]+";"
+				texto=texto+"\n"
+		print(texto)
+		self.drop.saveF(texto,"etiquetas.txt")
+	#----------------------------------------------------------------------
+	def openEvent(self):
+		"""
+		Evento que se dispara al cerrar la aplicación
+		"""
+		self.drop.buscar()
+		x=str(self.drop.abrirFichero("etiquetas.txt"),'cp1252')
+		y=x.split("\n")
+		print(y)
 	#----------------------------------------------------------------------
 	def EtiqNueva(self):
 		item = self.treeWidget.currentItem()
@@ -293,8 +310,7 @@ class MainWindow(QMainWindow):
 				if x.getNombre()==n and ("/"+x.getPadre())==y:
 					x.convertir(value)
 	#----------------------------------------------------------------------
-	def pruebasa(self):
-		self.drop.buscar()
+
 		
 """
 
