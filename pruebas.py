@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+T"), self, self.titulo)
 		QShortcut(QtGui.QKeySequence("Ctrl+Q"), self, self.ver)
 		self.openEvent()
-
+		
 
 	#----------------------------------------------------------------------
 	def formar(self):
@@ -108,7 +108,7 @@ class MainWindow(QMainWindow):
 		Rellenar el arbol de directorios con los archivos filtrados.
 		"""
 		ruta=os.getcwd()+"/icons/"
-		self.hijos=listaN
+		self.hijos2=listaN
 		header=QTreeWidgetItem(["Droppy"])
 		icon=QIcon(ruta+'home-icon.png')
 		icon2=QIcon(ruta+'text-plain-icon.png')
@@ -122,10 +122,10 @@ class MainWindow(QMainWindow):
 			q.append(t2[i])
 			A = QTreeWidgetItem(root,q)
 			A.setIcon(0,icon)
-			for j in range(len(self.hijos)):
-				if ("/"+self.hijos[j].getPadre())==t2[i]:
+			for j in range(len(self.hijos2)):
+				if ("/"+self.hijos2[j].getPadre())==t2[i]:
 					q=[]
-					q.append(self.hijos[j].getNombre())
+					q.append(self.hijos2[j].getNombre())
 					barA = QTreeWidgetItem(A,q)
 					barA.setIcon(0,icon2)
 	#----------------------------------------------------------------------
@@ -285,7 +285,7 @@ class MainWindow(QMainWindow):
 			if tam>2:
 				texto=texto+x.getPadre()+"/"+x.getNombre()+"/"
 				for i in range(2,tam):
-					texto=texto+etiquet[i]+";"
+					texto=texto+etiquet[i]+","
 				texto=texto+"\n"
 		print(texto)
 		self.drop.saveF(texto,"etiquetas.txt")
@@ -296,8 +296,17 @@ class MainWindow(QMainWindow):
 		"""
 		self.drop.buscar()
 		x=str(self.drop.abrirFichero("etiquetas.txt"),'cp1252')
-		y=x.split("\n")
-		print(y)
+		if(x!=""):
+			y=x.split("\n")
+			if(len(y)>0):
+				print(y)
+				for z in range(0,len(y)-1):
+					yy=y[z].split("/")
+					for xx in self.hijos:
+						if xx.getNombre()==yy[1] and xx.getPadre()==yy[0]:
+							xx.convertir(yy[2])
+				
+			
 	#----------------------------------------------------------------------
 	def EtiqNueva(self):
 		item = self.treeWidget.currentItem()
