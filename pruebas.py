@@ -12,6 +12,7 @@ import AESCipher
 class MainWindow(QMainWindow):
 	"""Constructor"""
 	def __init__(self,dr):
+		self.quetas=""
 		ruta=os.getcwd()+"/icons/"
   		#Iniciar el objeto QMainWindow
 		QMainWindow.__init__(self)
@@ -72,7 +73,7 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.save)
 		QShortcut(QtGui.QKeySequence("Ctrl+T"), self, self.titulo)
 		QShortcut(QtGui.QKeySequence("Ctrl+Q"), self, self.ver)
-		self.openEvent()
+
 		
 
 	#----------------------------------------------------------------------
@@ -101,6 +102,7 @@ class MainWindow(QMainWindow):
 					q.append(self.hijos[j].getNombre())
 					barA = QTreeWidgetItem(A,q)
 					barA.setIcon(0,icon2)
+		self.openEvent()
 	#----------------------------------------------------------------------
 
 	def formaE(self,listaN):
@@ -294,10 +296,11 @@ class MainWindow(QMainWindow):
 		"""
 		Evento que se dispara al cerrar la aplicación
 		"""
-		self.drop.buscar()
-		x=str(self.drop.abrirFichero("etiquetas.txt"),'cp1252')
-		if(x!=""):
-			y=x.split("\n")
+		if(self.quetas==""):
+			self.drop.buscar()
+			self.quetas=str(self.drop.abrirFichero("etiquetas.txt"),'cp1252')
+		if(self.quetas!=""):
+			y=self.quetas.split("\n")
 			if(len(y)>0):
 				print(y)
 				for z in range(0,len(y)-1):
