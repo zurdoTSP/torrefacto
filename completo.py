@@ -130,6 +130,7 @@ class DropObj(object):
 	#----------------------------------------------------------------------
 	def borrarF(self,dir):
 		respuesta = self.client.file_delete(dir)
+		print(bcolors.WARNING+"se ha borrado:"+bcolors.ENDC+bcolors.nuevo+dir+bcolors.ENDC)
 	#----------------------------------------------------------------------
 	def buscar(self):
 		respuesta = self.client.search("","etiquetas.txt")

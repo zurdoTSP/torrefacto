@@ -4,6 +4,7 @@ from PyQt5 import uic
 from PyQt5.QtGui import *
 from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
+from PyQt5 import QtPrintSupport
 import ctypes 
 import completo
 import os.path
@@ -13,6 +14,7 @@ class MainWindow(QMainWindow):
 	"""Constructor"""
 	def __init__(self,dr):
 		self.quetas=""
+		self.final=""
 		ruta=os.getcwd()+"/icons/"
   		#Iniciar el objeto QMainWindow
 		QMainWindow.__init__(self)
@@ -27,6 +29,7 @@ class MainWindow(QMainWindow):
 		iconSub=QIcon(ruta+'underline.png')
 		iconBus=QIcon(ruta+'lupa.png')
 		iconEtiq=QIcon(ruta+'etiqueta.png')
+		iconBor=QIcon(ruta+'papelera.png')
 		self.hijos=""
 		self.drop = dr
 		self.clave=AESCipher.AESCipher()
@@ -51,6 +54,7 @@ class MainWindow(QMainWindow):
 		self.subButton.clicked.connect(self.subra)
 		self.buscar.clicked.connect(self.ver)
 		self.bEtiq.clicked.connect(self.EtiqNueva)
+		self.bBorrar.clicked.connect(self.borrarElement)
 		self.treeWidget.itemDoubleClicked.connect(self.openElement)
 		self.formar()
 		self.treeWidget.expandToDepth(0)
@@ -61,6 +65,7 @@ class MainWindow(QMainWindow):
 		self.saves.setIcon(iconSa)
 		self.buscar.setIcon(iconBus)
 		self.bEtiq.setIcon(iconEtiq)
+		self.bBorrar.setIcon(iconBor)
 		self.abierto=""
 		self.negrita.setIcon(iconN)
 		self.listaB.setIcon(iconL)
@@ -73,6 +78,7 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+S"), self, self.save)
 		QShortcut(QtGui.QKeySequence("Ctrl+T"), self, self.titulo)
 		QShortcut(QtGui.QKeySequence("Ctrl+Q"), self, self.ver)
+		QShortcut(QtGui.QKeySequence("Ctrl+P"), self, self.imprimir)
 
 		
 
@@ -174,23 +180,32 @@ class MainWindow(QMainWindow):
 		y=item.parent()
 		y=y.text(0)
 		n=item.text(0)
-		final=y+"/"+n
+		self.final=y+"/"+n
 		if(y=="dropbox"):
 			print("ruta establecida ",n)
 			self.dirCrear=n
 		else:
-			self.abierto=final
-			if  final.endswith(".enc"):
+			self.abierto=self.final
+			if  self.final.endswith(".enc"):
 				value,crear= QInputDialog.getText(self, "CONTRASEÑA", "Dame la contraseña con la que cifrarás el fichero:",QLineEdit.Password)
 				if crear and value!='':
-					x=self.drop.abrirFichero(final)
+					x=self.drop.abrirFichero(self.final)
 					t=str(self.clave.decrypt(value,x),'cp1252')
 					self.directorio.setText(t)
 			else:
-				x=str(self.drop.abrirFichero(final),'cp1252')
+				x=str(self.drop.abrirFichero(self.final),'cp1252')
 				print(type(x))
 			#self.directorio.setText(self.drop.abrirFichero(final).decode('UTF-8'))
 				self.directorio.setText(x)
+	#----------------------------------------------------------------------
+	def borrarElement(self):
+		"""
+		Función para borrar ficheros de Dropbox.
+		"""
+		self.drop.borrarF(self.final)
+		self.treeWidget.clear()
+		self.formar()
+		self.treeWidget.expandToDepth(0)
 	#----------------------------------------------------------------------
 	def save(self):
 		"""
@@ -322,8 +337,14 @@ class MainWindow(QMainWindow):
 				if x.getNombre()==n and ("/"+x.getPadre())==y:
 					x.convertir(value)
 	#----------------------------------------------------------------------
+	def imprimir(self):
+		dialog = QtPrintSupport.QPrintDialog()
 
-		
+		if dialog.exec_() == QDialog.Accepted:
+			self.directorio.document().print_(dialog.printer())
+	#----------------------------------------------------------------------
+
+
 """
 
 barA = QTreeWidgetItem(A, ["bar", "i"])
