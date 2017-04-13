@@ -103,6 +103,9 @@ class DropObj(object):
 
 	#----------------------------------------------------------------------
 	def listarCarpetas(self):
+		"""
+		Función que crea una lista con los directorios y ficheros
+		"""
 		a=ficheros.ficheros()
 		metadata = self.client.metadata('/')
 		for x in metadata["contents"]:
@@ -116,6 +119,9 @@ class DropObj(object):
 		return a
 	#----------------------------------------------------------------------
 	def abrirFichero(self,fich):
+		"""
+		Función que abre un fichero y devuelve se contenido.
+		"""
 		f = self.client.get_file(fich)#abrimos el fichero con el que vamos a trabajar
 		x=f.read()
 		
