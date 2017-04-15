@@ -79,6 +79,8 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+T"), self, self.titulo)
 		QShortcut(QtGui.QKeySequence("Ctrl+Q"), self, self.ver)
 		QShortcut(QtGui.QKeySequence("Ctrl+P"), self, self.imprimir)
+		QShortcut(QtGui.QKeySequence("Ctrl+F"), self, self.busqueda)
+
 
 		
 
@@ -343,6 +345,10 @@ class MainWindow(QMainWindow):
 		if dialog.exec_() == QDialog.Accepted:
 			self.directorio.document().print_(dialog.printer())
 	#----------------------------------------------------------------------
+	def busqueda(self):
+		value,crear= QInputDialog.getText(self, "Buscar", "Introduce los caracteres a buscar:")
+		if crear and value!='':
+			self.directorio.find(value)
 
 
 """
