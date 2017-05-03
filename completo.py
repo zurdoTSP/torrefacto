@@ -28,7 +28,7 @@ class DropObj(object):
 	#----------------------------------------------------------------------
 	def nuevoToken(self,code):
 		"""
-		Connect and authenticate with dropbox
+		Guardamos el valor de nuestro identificador de dropbox.
 		"""
 		self.access_token, user_id = self.flow.finish(code)
 		self.client = dropbox.client.DropboxClient(self.access_token)
@@ -39,7 +39,7 @@ class DropObj(object):
 	#----------------------------------------------------------------------
 	def autoiden(self):
 		"""
-		Connect and authenticate with dropbox
+		Cogemos el token del fichero y lo validamos.
 		"""
 		infile = open('.token.txt', 'r')
 		x=infile.read()
@@ -82,6 +82,13 @@ class DropObj(object):
 
 	#----------------------------------------------------------------------
 	def crearCarpeta(self,carpeta):
+		"""
+		Función que crea una carpeta en dropbox
+
+		Parámetros:
+		carpeta -- nombre de la carpeta que será creada.
+		
+		"""
 
 		self.client.file_create_folder('/'+carpeta)
 
@@ -89,7 +96,7 @@ class DropObj(object):
 
 	def upload_file(self,ruta="/"):
 		"""
-		Subida de fichero a dropbox con ruta opcional
+		Subida de fichero a dropbox con ruta opcional.
 		"""
 		try:
 			with open(self.filename) as fh:
@@ -104,7 +111,7 @@ class DropObj(object):
 	#----------------------------------------------------------------------
 	def listarCarpetas(self):
 		"""
-		Función que crea una lista con los directorios y ficheros
+		Función que crea una lista con los directorios y ficheros.
 		"""
 		a=ficheros.ficheros()
 		metadata = self.client.metadata('/')
@@ -129,16 +136,47 @@ class DropObj(object):
 		return x
 	#----------------------------------------------------------------------
 	def archivoMod(self,nomb,dir):
+		"""
+		Función que crea un fichero sin ningún contenido en la carpeta indicada.
+
+		Parámetros:
+		nombre -- nombre del fichero
+		dir -- carpeta donde se aloja el fichero
+		
+		"""
 		respuesta = self.client.put_file(dir+"/"+nomb, "",1)
 	#----------------------------------------------------------------------
 	def saveF(self,contenido,dir):
-		respuesta = self.client.put_file(dir, contenido,1)
+		"""
+		Función que guarda el contenido de un fichero existente que ha sido modificado.
+
+		Parámetros:
+		contenido -- nuevo contenido del fichero.
+		dir -- dirección del fichero a modificar
+		
+		"""
+		try:
+			respuesta = self.client.put_file(dir, contenido,1)
+		except:
+			print("error al guardar")
 	#----------------------------------------------------------------------
 	def borrarF(self,dir):
+		"""
+		Función que borra un fichero indicado.
+
+		Parámetros:
+		dir -- dirección del fichero a modificar
+		
+		"""
 		respuesta = self.client.file_delete(dir)
 		print(bcolors.WARNING+"se ha borrado:"+bcolors.ENDC+bcolors.nuevo+dir+bcolors.ENDC)
 	#----------------------------------------------------------------------
 	def buscar(self):
+		"""
+		Función que busca el fichero de etiquetas, si no existe lo crea
+		
+		"""
+
 		respuesta = self.client.search("","etiquetas.txt")
 		if(respuesta==[]):
 		

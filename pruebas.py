@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
@@ -13,6 +14,7 @@ import AESCipher
 class MainWindow(QMainWindow):
 	"""Constructor"""
 	def __init__(self,dr):
+		self.carActiva=False
 		self.quetas=""
 		self.final=""
 		ruta=os.getcwd()+"/icons/"
@@ -82,6 +84,7 @@ class MainWindow(QMainWindow):
 		QShortcut(QtGui.QKeySequence("Ctrl+F"), self, self.busqueda)
 
 
+
 		
 
 	#----------------------------------------------------------------------
@@ -98,11 +101,11 @@ class MainWindow(QMainWindow):
 		icon2=QIcon(ruta+'text-plain-icon.png')
 
 		self.treeWidget.setHeaderItem(header) 
-		root = QTreeWidgetItem(self.treeWidget, ["dropbox"])
+		self.root = QTreeWidgetItem(self.treeWidget, ["dropbox"])
 		for i in range(len(t2)):
 			q=[]
 			q.append(t2[i])
-			A = QTreeWidgetItem(root,q)
+			A = QTreeWidgetItem(self.root,q)
 			A.setIcon(0,icon)
 			for j in range(len(self.hijos)):
 				if ("/"+self.hijos[j].getPadre())==t2[i]:
@@ -126,7 +129,7 @@ class MainWindow(QMainWindow):
 		for w in listaN:
 			t2.append("/"+w.getPadre())
 		self.treeWidget.setHeaderItem(header) 
-		root = QTreeWidgetItem(self.treeWidget, ["dropbox"])
+		self.root = QTreeWidgetItem(self.treeWidget, ["dropbox"])
 		for i in range(len(t2)):
 			q=[]
 			q.append(t2[i])
@@ -138,6 +141,21 @@ class MainWindow(QMainWindow):
 					q.append(self.hijos2[j].getNombre())
 					barA = QTreeWidgetItem(A,q)
 					barA.setIcon(0,icon2)
+	#----------------------------------------------------------------------
+
+########################PRUEBAS ZURDAS########################################################
+	def NCarBonita(self,carpeta):
+		"""
+		Rellenar el arbol de directorios para trabajar con los archivos/ficheros de Dropbox.
+		"""
+		ruta=os.getcwd()+"/icons/"
+		icon=QIcon(ruta+'home-icon.png')
+
+		q=[]
+		q.append(carpeta)
+		A = QTreeWidgetItem(self.root,q)
+		A.setIcon(0,icon)
+
 	#----------------------------------------------------------------------
 	"""###########################################################
 
@@ -152,9 +170,10 @@ class MainWindow(QMainWindow):
 		if crear and value!='':
 			print('Nombre:', value)
 			self.drop.crearCarpeta(value)
-			self.treeWidget.clear()
-			self.formar()
-			self.treeWidget.expandToDepth(0)
+			self.NCarBonita(value)
+			#self.treeWidget.clear()
+			#self.formar()
+			#self.treeWidget.expandToDepth(0)
 	#----------------------------------------------------------------------
 	def crearFich(self):
 		"""
@@ -185,8 +204,10 @@ class MainWindow(QMainWindow):
 		self.final=y+"/"+n
 		if(y=="dropbox"):
 			print("ruta establecida ",n)
+			self.carActiva=True
 			self.dirCrear=n
 		else:
+			self.carActiva=False
 			self.abierto=self.final
 			if  self.final.endswith(".enc"):
 				value,crear= QInputDialog.getText(self, "CONTRASEÑA", "Dame la contraseña con la que cifrarás el fichero:",QLineEdit.Password)
@@ -199,15 +220,25 @@ class MainWindow(QMainWindow):
 				print(type(x))
 			#self.directorio.setText(self.drop.abrirFichero(final).decode('UTF-8'))
 				self.directorio.setText(x)
+
+		print(self.carActiva)
 	#----------------------------------------------------------------------
 	def borrarElement(self):
 		"""
 		Función para borrar ficheros de Dropbox.
 		"""
-		self.drop.borrarF(self.final)
-		self.treeWidget.clear()
-		self.formar()
-		self.treeWidget.expandToDepth(0)
+		if(self.carActiva==True):
+			item = self.treeWidget.currentItem()
+			n=item.text(0)
+			self.drop.borrarF(n)
+			self.treeWidget.clear()
+			self.formar()
+			self.treeWidget.expandToDepth(0)
+		else:
+			self.drop.borrarF(self.final)
+			self.treeWidget.clear()
+			self.formar()
+			self.treeWidget.expandToDepth(0)
 	#----------------------------------------------------------------------
 	def save(self):
 		"""
@@ -228,9 +259,11 @@ class MainWindow(QMainWindow):
 				
 			else:
 				self.drop.saveF(self.directorio.toHtml(),self.abierto)
+				print(self.directorio.toPlainText())
 		else:
 			QMessageBox.warning(self, "WARNING", "Debes trabajar con un fichero antes de guardarlo")
 		print("se guarda")
+		self.systray.showMessage("Torrefacto","Se ha guardado el fichero.")
 	#----------------------------------------------------------------------
 	"""###########################################################
 
@@ -329,23 +362,35 @@ class MainWindow(QMainWindow):
 			
 	#----------------------------------------------------------------------
 	def EtiqNueva(self):
+		"""
+		Función que introduce las etiquetas nuevas en el fichero marcado.
+		
+		"""
 		item = self.treeWidget.currentItem()
 		y=item.parent()
 		y=y.text(0)
 		n=item.text(0)
-		value,crear= QInputDialog.getText(self, "crear archivo", "Nombre de la nueva carpeta:")
+		value,crear= QInputDialog.getText(self, "crear etiqueta", "Escribe las etiquetas nuevas separadas por , (no usar espacios):")
 		if crear and value!='':
 			for x in self.hijos:
 				if x.getNombre()==n and ("/"+x.getPadre())==y:
 					x.convertir(value)
 	#----------------------------------------------------------------------
 	def imprimir(self):
+		"""
+		Función que imprime o convierte a PDF la nota abierta.
+		
+		"""
 		dialog = QtPrintSupport.QPrintDialog()
 
 		if dialog.exec_() == QDialog.Accepted:
 			self.directorio.document().print_(dialog.printer())
 	#----------------------------------------------------------------------
 	def busqueda(self):
+		"""
+		Función que busca una cadena dentro de la nota.
+		
+		"""
 		value,crear= QInputDialog.getText(self, "Buscar", "Introduce los caracteres a buscar:")
 		if crear and value!='':
 			self.directorio.find(value)

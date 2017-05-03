@@ -21,7 +21,7 @@ class Hijo:
 		Función que modifica el valor de la variable nombre, la cual es el hijo
 
 		Parámetros:
-		padre -- nueva dirección
+		nombre -- nueva dirección
 		
 		"""
 		self.__nombre=dir
