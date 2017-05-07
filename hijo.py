@@ -6,6 +6,7 @@ class Hijo:
 		self.__nombre=''
 		self.__padre=''
 		self.__etiqueta=[]
+	#----------------------------------------------------------------------
 	def setPadre(self,dir):
 		"""
 		Función que modifica el valor de la variable padre
@@ -62,7 +63,7 @@ class Hijo:
 		
 		"""
 		self.__etiqueta.append(x)		
-	#----------------------------------------------------------------------		__
+	#----------------------------------------------------------------------	
 	def getEtiqueta(self):
 		"""
 		Función que devuelve las etiquetas

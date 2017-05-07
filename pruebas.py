@@ -133,7 +133,7 @@ class MainWindow(QMainWindow):
 		for i in range(len(t2)):
 			q=[]
 			q.append(t2[i])
-			A = QTreeWidgetItem(root,q)
+			A = QTreeWidgetItem(self.root,q)
 			A.setIcon(0,icon)
 			for j in range(len(self.hijos2)):
 				if ("/"+self.hijos2[j].getPadre())==t2[i]:
@@ -394,6 +394,20 @@ class MainWindow(QMainWindow):
 		value,crear= QInputDialog.getText(self, "Buscar", "Introduce los caracteres a buscar:")
 		if crear and value!='':
 			self.directorio.find(value)
+
+
+	def moveEvent(self, event):
+		pos = event.pos()
+		self.x = pos.x()
+		self.y = pos.y() 
+    #self.browser.SetBounds(self.x, self.y, self.width, self.height)
+
+	def resizeEvent(self, event):
+		size = event.size()
+		self.width = size.width()
+		self.height = size.height() 
+		print("funciona?")
+		#self.directorio.resize(self.width/1.5,self.height/2)
 
 
 """
